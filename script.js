@@ -1,69 +1,48 @@
-let value = ''
-let bill = ''
-let productName = ''
-let subtotal = 0
-let total = 0
-let amount = 0
-let productPrice = 0
-let exit = false
+import { industryCategories } from "./industries.js";
+import { stores } from "./stores.js"
 
-function updateBill() {
+let industries = industryCategories.map((industry, index) => {
 
-    subtotal = 0
-    subtotal += productPrice * amount
+    return {
+        industry,
+        orden: index + 1
+    }
+}).map(industry => `  ${industry.orden}) ${industry.industry.name}`)
+let id_industry = 0
+let value = parseInt(prompt(`Escribe  el  numero para ingresar  al rubro  deseado  \n ${industries}`))
+switch (value) {
+    case 1:
 
-    total += subtotal
-
-    bill += `Producto: ${productName} --  Precio Unitario: ${productPrice} -- Cant.: ${amount} -- Precio  Total: ${subtotal} \n`
-    alert(`${bill} \n total: ${total}`)
-
+        id_industry = industryCategories.find(industry => industry.name == 'Restaurantes').id
+        break;
+    case 2:
+        id_industry = industryCategories.find(industry => industry.name == 'Farmacias').id
+        break;
+    case 3:
+        id_industry = industryCategories.find(industry => industry.name == 'Mascotas').id
+        break;
+    default:
+        break;
 }
 
+const getStores = stores.filter(store => store.industryCategory == id_industry)
+let test = ``
+
+getStores.forEach(store => {
+    test += `${store.name}\n\n`
+    store.products.sort(prod => prod.category)
+
+    store.products.forEach(product => {
 
 
 
-do {
-
-    value = prompt('Escribe el número según la opción que desees\n|1 - producto1 $50\n|2 - producto2 $100\n|3 - product3 $250\n|0 Salir')
+        test += `categoria: ${product.category}\n ${product.name}: ${product.price} \n \n`
 
 
-    if (value == 1 || value == 2 || value == 3) {
-        amount = parseInt(prompt('escribe la  cantidad deseada'))
-    }
 
-    if (!isNaN(amount)) {
+    })
 
-        switch (value) {
+    test += `----------------\n`
+})
 
-            case '1':
-
-                productName = 'product1'
-                productPrice = 50;
-                updateBill()
-                break;
-            case '2':
-                productName = 'product2'
-                productPrice = 100;
-                updateBill()
-                break;
-
-            case '3':
-                productName = 'product3'
-                productPrice = 250;
-                updateBill()
-                break;
-            case '0':
-                exit = true;
-                break;
-            default:
-                alert('valor invalido')
-
-                break;
-        }
-
-    } else {
-
-        alert('valor invalido')
-    }
-
-} while (!exit);
+alert(test)
